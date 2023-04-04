@@ -11,69 +11,55 @@
 
 Полная документация к API находится по эндпоинту /redoc
 
-### Запуск проекта в dev-режиме
-- Клонировать репозиторий и перейти в него в командной строке.
-- Установите и активируйте виртуальное окружение c учетом версии Python 3.7 (выбираем python не ниже 3.7):
+## Запуск проекта через docker-compose
+- Клонировать репозиторий, открыть терминал в корневой папке проекта и перейти в папку, содержащую файл *docker-compose.yaml*.
 
 ```bash
-python3.7 -m venv venv
+cd infra_sp2/api_yamdb/infra
 ```
 
-```bash
-source venv/Scripts/activate
+- Создайте файл `.env` с переменными окружения для работы с базой данных:
+```YAML
+DB_ENGINE=django.db.backends.postgresql # указываем, что работаем с postgresql
+DB_NAME=postgres # имя базы данных
+POSTGRES_USER=postgres # логин для подключения к базе данных
+POSTGRES_PASSWORD=postgres # пароль для подключения к БД (установите свой)
+DB_HOST=db # название сервиса (контейнера)
+DB_PORT=5432 # порт для подключения к БД 
 ```
 
-- Затем нужно установить все зависимости из файла requirements.txt
 
-```bash
-python3.7 -m pip install --upgrade pip
-```
 
+- Собираем образ при помощи docker-compose
 ```bash
-pip3 install -r requirements.txt
+docker-compose up -d --build
 ```
 
 - Выполняем миграции:
-
 ```bash
-python3.7 manage.py migrate --run-syncdb
+docker-compose exec web python manage.py migrate
 ```
 
-Если есть необходимость, заполняем базу тестовыми данными командами:
+- Заполняем базу данных сайта:
 
 ```bash
-python3.7 manage.py load_title
-```
-```bash
-python3.7 manage.py load_category
-```
-```bash
-python3.7 manage.py load_comments
-```
-```bash
-python3.7 manage.py load_genre
-```
-```bash
-python3.7 manage.py load_reviews
-```
-```bash
-python3.7 manage.py load_titles
-```
-```bash
-python3.7 manage.py load_users
+docker-compose exec web python manage.py load_users 
+docker-compose exec web python manage.py load_titles
+docker-compose exec web python manage.py load_genre 
+docker-compose exec web python manage.py load_comments
+docker-compose exec web python manage.py load_category
 ```
 
-
-Создаем суперпользователя, после меняем в админ панели роль с user на admin:
+- Собираем статику:
 
 ```bash
-python3.7 manage.py createsuperuser
+docker-compose exec web python manage.py collectstatic --no-input
 ```
 
-Запускаем проект:
+И создаем администратора сайта:
 
 ```bash
-python3.7 manage.py runserver localhost:8000
+docker-compose exec web python manage.py createsuperuser
 ```
 
 ### Примеры работы с API для всех пользователей
@@ -92,4 +78,3 @@ GET /api/v1/titles/{title_id}/reviews/ - Получение списка все�
 GET /api/v1/titles/{title_id}/reviews/{review_id}/comments/ - Получение списка всех комментариев к отзыву
 Права доступа: Администратор
 GET /api/v1/users/ - Получение списка всех пользователей
-```
