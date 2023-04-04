@@ -3,7 +3,7 @@ from reviews.models import Category, Genre, Title, User
 
 
 @admin.register(User)
-class CategoryAdmin(admin.ModelAdmin):
+class UseryAdmin(admin.ModelAdmin):
     list_display = (
         'username',
         'email',
@@ -34,7 +34,7 @@ class GenreAdmin(admin.ModelAdmin):
 
 
 @admin.register(Title)
-class CategoryAdmin(admin.ModelAdmin):
+class TitleyAdmin(admin.ModelAdmin):
     list_display = (
         'name',
         'year',
