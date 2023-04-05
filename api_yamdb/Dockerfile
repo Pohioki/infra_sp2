@@ -5,7 +5,7 @@ RUN mkdir /app
 
 # Скопировать с локального компьютера файл зависимостей
 # в директорию /app.
-COPY requirements.txt /app
+COPY ../requirements.txt /app
 
 RUN pip install --upgrade pip
 RUN pip install psycopg2-binary
