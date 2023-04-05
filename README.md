@@ -29,7 +29,6 @@ DB_PORT=5432 # порт для подключения к БД
 ```
 
 
-
 - Собираем образ при помощи docker-compose
 ```bash
 docker-compose up -d --build
@@ -60,6 +59,11 @@ docker-compose exec web python manage.py collectstatic --no-input
 
 ```bash
 docker-compose exec web python manage.py createsuperuser
+```
+
+### Ссылка на образ в DockerHub
+```bash
+docker pull pohioki/infra_sp2:v04.04.2023
 ```
 
 ### Примеры работы с API для всех пользователей
